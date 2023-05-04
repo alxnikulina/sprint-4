@@ -1,28 +1,22 @@
 import allure
+from data.urls import Urls
 from pages.main_page import MainPage
 
 
-class Testlogo:
+class TestLogo:
     @allure.description(
-        "Проверить: если нажать на логотип Яндекса, в новом окне откроется главная страница Яндекса"
+        "Проверить: если нажать на логотип Яндекс, в новом окне откроется новая страница"
     )
-    @allure.title(
-        "если нажать на логотип Яндекса, в новом окне откроется главная страница Яндекса"
-    )
-    def test_click_yandex_logo(self, driver):
+    def test_ya_logo_click_opens_new_window(self, driver):
         main_page = MainPage(driver)
-        driver.get("https://qa-scooter.praktikum-services.ru")
         main_page.click_yandex_logo()
         assert len(driver.window_handles) == 2
 
     @allure.description(
-        "Проверить: если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»"
+        "Проверить: если нажать на логотип Самокат, переадресации не произойдет"
     )
-    @allure.title(
-        "если нажать на логотип «Самоката», попадёшь на главную страницу «Самоката»"
-    )
-    def test_click_scooter_logo(self, driver):
+    def test_samokat_logo_click_doesnt_open_new_window(self, driver):
         main_page = MainPage(driver)
-        driver.get("https://qa-scooter.praktikum-services.ru/order")
-        main_page.click_scooter_logo()
-        assert driver.current_url == "https://qa-scooter.praktikum-services.ru/"
+        main_page.click_samokat_logo()
+        assert driver.current_url == Urls.main_page
+        assert len(driver.window_handles) == 1

@@ -1,230 +1,42 @@
 import allure
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-
+from data.urls import Urls
 from locators.main_page_locators import MainPageLocators
+from pages.base_page import BasePage
+from pages.order_page import OrderPage
 
 
-class MainPage:
+class MainPage(BasePage):
     def __init__(self, driver):
-        self.driver = driver
+        super().__init__(driver)
+        self.navigate_to_url(Urls.main_page)
+        self.__click_accept_cookies_button()
 
-    @allure.step("Клик по логотипу Яндекса")
+    @allure.step("Клик по логотипу Яндекс")
     def click_yandex_logo(self):
-        self.driver.find_element(*MainPageLocators.locator_ya_logo).click()
+        self.driver.find_element(*MainPageLocators.yandex_logo).click()
 
-    @allure.step("Клик по логотипу Самоката")
-    def click_scooter_logo(self):
-        self.driver.find_element(*MainPageLocators.locator_samokat_logo).click()
+    @allure.step("Клик по логотипу Самокат")
+    def click_samokat_logo(self):
+        self.driver.find_element(*MainPageLocators.samokat_logo).click()
 
-    @allure.step("Нажать Куки.")
-    def click_close_cookie(self):
-        self.driver.find_element(*MainPageLocators.locator_cookie_button).click()
+    @allure.step("Закрыть уведомление о политике cookies")
+    def __click_accept_cookies_button(self):
+        self.driver.find_element(*MainPageLocators.accept_cookie_button).click()
 
-    @allure.step("Клик по кнопке Заказать вверху страницы")
-    def click_first_order_button(self):
-        self.driver.find_elements(*MainPageLocators.locator_order_button)[0].click()
+    @allure.step("Клик по кнопке 'Заказать' вверху страницы")
+    def click_top_order_button(self):
+        self.driver.find_element(*MainPageLocators.top_order_button).click()
+        return OrderPage(self.driver)
 
-    @allure.step("Клик по кнопке Заказать внизу страницы")
-    def click_second_order_button(self):
-        self.driver.find_elements(*MainPageLocators.locator_order_button)[2].click()
+    @allure.step('Клик по вопросу "{question_number}"')
+    def click_question(self, question_number):
+        questions_block = self.driver.find_element(*MainPageLocators.questions_block)
+        self.scroll_to_element(questions_block)
+        questions = self.wait_for_presence_of_all_elements(MainPageLocators.questions)
+        self.wait_for_element_clickable(questions[question_number - 1]).click()
 
-    @allure.step("Клик по первому вопросу")
-    def click_question_one(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_one_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по второму вопросу")
-    def click_question_two(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_two_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по третьему вопросу")
-    def click_question_three(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_three_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по четвертому вопросу")
-    def click_question_four(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_four_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по пятому вопросу")
-    def click_question_five(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_five_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по шестому вопросу")
-    def click_question_six(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_six_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по седьмому вопросу")
-    def click_question_seven(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_seven_element
-            )
-        )
-        element.click()
-
-    @allure.step("Клик по восьмому вопросу")
-    def click_question_eight(self):
-        last_element = self.driver.find_element(
-            *MainPageLocators.locator_question_eight_element
-        )
-        self.driver.execute_script("arguments[0].scrollIntoView();", last_element)
-        element = WebDriverWait(self.driver, 30).until(
-            ec.visibility_of_element_located(
-                MainPageLocators.locator_question_eight_element
-            )
-        )
-        element.click()
-
-    @allure.step("Ответ на первый вопрос")
-    def get_answer_one(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    *MainPageLocators.locator_answer_one_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на второй вопрос")
-    def get_answer_two(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_two_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на третий вопрос")
-    def get_answer_three(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_three_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на четвертый вопрос")
-    def get_answer_four(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_four_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на пятый вопрос")
-    def get_answer_five(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_five_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на шестой вопрос")
-    def get_answer_six(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_six_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на седьмой вопрос")
-    def get_answer_seven(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_seven_element
-                )
-            )
-            .text
-        )
-
-    @allure.step("Ответ на восьмой вопрос")
-    def get_answer_eight(self):
-        return (
-            WebDriverWait(self.driver, 15)
-            .until(
-                ec.visibility_of_element_located(
-                    MainPageLocators.locator_answer_eight_element
-                )
-            )
-            .text
-        )
+    @allure.step("Ответ на вопрос")
+    def get_answer(self, question_number):
+        by, path = MainPageLocators.answer
+        path = path.format(question_num=question_number - 1)
+        return self.wait_for_visibility_of_element((by, path)).text
